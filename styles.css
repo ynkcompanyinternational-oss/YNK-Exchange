@@ -8,7 +8,7 @@ a{color:inherit;text-decoration:none}.gold-frame{position:fixed;inset:12px;point
 .site-header{max-width:var(--max);margin:auto;min-height:82px;padding:18px 34px;display:flex;align-items:center;gap:30px;position:sticky;top:0;z-index:15;background:rgba(4,8,13,.82);backdrop-filter:blur(18px);border-bottom:1px solid rgba(183,154,89,.15)}
 .brand{width:120px;display:flex;flex-direction:column;align-items:center;line-height:.9;color:var(--gold2);font-family:Georgia,serif;letter-spacing:.05em}.brand span{font-size:34px}.brand small{font-size:14px;letter-spacing:.18em;margin-top:4px}.nav{display:flex;justify-content:center;gap:26px;flex:1}.nav a{font-size:12px;text-transform:uppercase;letter-spacing:.13em;color:#c8c1b5;transition:.25s}.nav a:hover{color:var(--gold2)}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:14px;min-height:46px;padding:0 22px;border-radius:3px;text-transform:uppercase;letter-spacing:.12em;font-size:11px;font-weight:600;cursor:pointer;transition:.25s;border:1px solid var(--line);font-family:inherit}.btn-gold{color:#0a0b0c;background:linear-gradient(135deg,#8d6c2d,#cdb36e 46%,#9c7b38);box-shadow:0 5px 22px rgba(183,154,89,.18)}.btn-gold:hover{filter:brightness(1.12);transform:translateY(-1px)}.btn-outline,.btn-ghost{background:rgba(8,12,18,.4);color:var(--gold2)}.btn-outline:hover,.btn-ghost:hover{background:rgba(183,154,89,.08)}
-.menu-toggle{display:none;background:none;border:0;color:var(--gold2);font-size:24px}.hero{max-width:var(--max);min-height:650px;margin:auto;padding:72px 34px 50px;display:grid;grid-template-columns:.9fr 1.1fr;align-items:center;gap:40px}.hero-copy{position:relative;z-index:2}.eyebrow{font-size:11px;letter-spacing:.22em;color:var(--gold2);text-transform:uppercase}.hero h1{font:500 clamp(70px,10vw,150px)/.85 Georgia,serif;margin:18px 0;color:#e2d2a7;letter-spacing:-.045em;text-shadow:0 3px 22px rgba(183,154,89,.16)}.hero h1 em{font-style:normal;color:#887345}.lead{max-width:650px;color:#bbb6ad;font-size:16px}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.hero-art{height:530px;border:1px solid var(--line);background:linear-gradient(115deg,rgba(6,12,19,.18),rgba(6,12,19,.72)),url("assets/ynk-visual-reference.png") center/cover;box-shadow:var(--shadow);position:relative}.hero-art:after{content:"";position:absolute;inset:16px;border:1px solid rgba(213,192,128,.18)}
+.menu-toggle{display:none;background:none;border:0;color:var(--gold2);font-size:24px}.hero{max-width:var(--max);min-height:650px;margin:auto;padding:72px 34px 50px;display:grid;grid-template-columns:.9fr 1.1fr;align-items:center;gap:40px}.hero-copy{position:relative;z-index:2}.eyebrow{font-size:11px;letter-spacing:.22em;color:var(--gold2);text-transform:uppercase}.hero h1{font:500 clamp(70px,10vw,150px)/.85 Georgia,serif;margin:18px 0;color:#e2d2a7;letter-spacing:-.045em;text-shadow:0 3px 22px rgba(183,154,89,.16)}.hero h1 em{font-style:normal;color:#887345}.lead{max-width:650px;color:#bbb6ad;font-size:16px}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.hero-art{height:530px;border:1px solid var(--line);background:linear-gradient(115deg,rgba(6,12,19,.18),rgba(6,12,19,.72)),none center/cover;box-shadow:var(--shadow);position:relative}.hero-art:after{content:"";position:absolute;inset:16px;border:1px solid rgba(213,192,128,.18)}
 .section{max-width:var(--max);margin:auto;padding:100px 34px}.section-head{max-width:850px;margin-bottom:45px}.section h2{font:500 clamp(38px,5vw,68px)/1.02 Georgia,serif;color:#ded5c3;margin:10px 0 18px}.section-head p:not(.eyebrow){color:var(--muted);max-width:760px}
 .about-grid,.feature-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.feature-grid{grid-template-columns:repeat(3,1fr)}.glass-card{background:linear-gradient(145deg,rgba(16,23,32,.8),rgba(7,11,17,.8));border:1px solid rgba(183,154,89,.27);box-shadow:var(--shadow);padding:28px}.glass-card h3{font:500 25px Georgia,serif;color:#d6c28f;margin:10px 0}.glass-card p{color:var(--muted);font-size:14px}.number{color:var(--gold);font-size:12px;letter-spacing:.12em}
 .division-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.division-card{min-height:155px;border:1px solid rgba(183,154,89,.25);padding:25px;background:linear-gradient(150deg,#0b1119,#06090d);display:flex;flex-direction:column;justify-content:space-between;transition:.25s}.division-card:hover{border-color:rgba(213,192,128,.7);transform:translateY(-3px)}.division-card b{font-size:11px;color:#7e6b45}.division-card strong{font:500 22px Georgia,serif;color:#d2bf8e}.division-card span{align-self:flex-end;color:var(--gold2)}
@@ -19,3 +19,27 @@ a{color:inherit;text-decoration:none}.gold-frame{position:fixed;inset:12px;point
 .footer{max-width:var(--max);margin:auto;padding:60px 34px 80px;border-top:1px solid rgba(183,154,89,.2);display:grid;grid-template-columns:1fr 1fr auto;gap:30px;align-items:end}.footer-brand{align-items:flex-start}.footer p{color:#777;font-size:11px}.footer-links{display:flex;flex-direction:column;gap:9px;font-size:12px;color:#aaa}.footer-links a:hover{color:var(--gold2)}.copyright{white-space:nowrap}
 @media(max-width:950px){.nav{display:none}.menu-toggle{display:block;margin-left:auto}.site-header .btn{display:none}.hero{grid-template-columns:1fr;padding-top:55px}.hero-art{height:360px}.about-grid,.division-grid{grid-template-columns:repeat(2,1fr)}.dashboard,.crypto-layout{grid-template-columns:1fr}.footer{grid-template-columns:1fr}.copyright{white-space:normal}}
 @media(max-width:560px){.gold-frame{inset:5px}.site-header{padding:14px 20px}.hero,.section{padding-left:20px;padding-right:20px}.hero h1{font-size:65px}.about-grid,.division-grid,.feature-grid{grid-template-columns:1fr}.global-panel{padding:40px 25px}.metric-row{grid-template-columns:1fr}.chart-wrap{height:220px}.footer{padding-left:20px;padding-right:20px}}
+
+
+/* YNK & Co. — Official centered logo */
+.site-header {
+  position: relative;
+}
+
+.ynk-top-logo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ynk-top-logo img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  border-radius: 50%;
+}

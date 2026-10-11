@@ -14,3 +14,12 @@ build/
 # Secrets
 .env
 .env.*
+
+# Credenciais privadas
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+__pycache__/
+*.pyc
