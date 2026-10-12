@@ -66,3 +66,57 @@ def etherscan_test():
             "connected": False,
             "error": str(e)
         }
+
+
+@app.get("/wallet/ethereum")
+def ethereum_wallet():
+    wallet = os.getenv("ETH_WALLET_ADDRESS")
+    rpc_url = os.getenv(
+        "ETH_RPC_URL",
+        "https://ethereum-rpc.publicnode.com"
+    )
+
+    if not wallet:
+        return {
+            "connected": False,
+            "mode": "READ_ONLY",
+            "error": "Wallet address not configured"
+        }
+
+    try:
+        response = requests.post(
+            rpc_url,
+            json={
+                "jsonrpc": "2.0",
+                "method": "eth_getBalance",
+                "params": [wallet, "latest"],
+                "id": 1
+            },
+            timeout=15
+        )
+
+        data = response.json()
+
+        if "result" not in data:
+            return {
+                "connected": False,
+                "mode": "READ_ONLY",
+                "error": "Blockchain RPC error"
+            }
+
+        balance_wei = int(data["result"], 16)
+        balance_eth = balance_wei / 10**18
+
+        return {
+            "connected": True,
+            "network": "Ethereum Mainnet",
+            "mode": "READ_ONLY",
+            "balance_eth": balance_eth
+        }
+
+    except Exception as e:
+        return {
+            "connected": False,
+            "mode": "READ_ONLY",
+            "error": str(e)
+        }
