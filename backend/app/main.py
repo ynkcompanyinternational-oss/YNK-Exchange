@@ -286,7 +286,7 @@ def ethereum_approved_portfolio():
 def market_candles():
     try:
         response = requests.get(
-            "https://api.binance.com/api/v3/klines",
+            "https://data-api.binance.vision/api/v3/klines",
             params={
                 "symbol": "WBETHUSDT",
                 "interval": "1h",
