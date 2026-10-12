@@ -147,3 +147,98 @@ async function loadYNKPortfolio() {
 }
 
 loadYNKPortfolio();
+
+async function loadMarketCandles() {
+  const container = document.getElementById("market-candlestick-chart");
+  if (!container) return;
+
+  try {
+    const response = await fetch(`${YNK_API}/market/candles`);
+    if (!response.ok) throw new Error("Market API unavailable");
+
+    const data = await response.json();
+    const candles = data.candles || [];
+
+    if (!data.connected || !candles.length) {
+      throw new Error(data.error || "No candle data");
+    }
+
+    const width = 1000;
+    const height = 360;
+    const pad = 28;
+
+    const highs = candles.map(c => Number(c.high));
+    const lows = candles.map(c => Number(c.low));
+
+    const maxPrice = Math.max(...highs);
+    const minPrice = Math.min(...lows);
+    const range = Math.max(maxPrice - minPrice, 1);
+
+    const xStep = (width - pad * 2) / candles.length;
+    const candleWidth = Math.max(2, xStep * 0.55);
+
+    const priceToY = (price) =>
+      pad + ((maxPrice - price) / range) * (height - pad * 2);
+
+    const svgCandles = candles.map((c, i) => {
+      const open = Number(c.open);
+      const high = Number(c.high);
+      const low = Number(c.low);
+      const close = Number(c.close);
+
+      const x = pad + i * xStep + xStep / 2;
+      const yHigh = priceToY(high);
+      const yLow = priceToY(low);
+      const yOpen = priceToY(open);
+      const yClose = priceToY(close);
+
+      const rising = close >= open;
+      const bodyY = Math.min(yOpen, yClose);
+      const bodyH = Math.max(1.5, Math.abs(yClose - yOpen));
+      const color = rising ? "#39c58a" : "#e15b64";
+
+      return `
+        <line
+          x1="${x}" y1="${yHigh}"
+          x2="${x}" y2="${yLow}"
+          stroke="${color}"
+          stroke-width="1.2"
+        />
+        <rect
+          x="${x - candleWidth / 2}"
+          y="${bodyY}"
+          width="${candleWidth}"
+          height="${bodyH}"
+          fill="${color}"
+          rx="1"
+        />
+      `;
+    }).join("");
+
+    const latest = candles[candles.length - 1];
+
+    container.innerHTML = `
+      <div class="market-chart-meta">
+        <span>Open: ${formatUSD(latest.open)}</span>
+        <span>High: ${formatUSD(latest.high)}</span>
+        <span>Low: ${formatUSD(latest.low)}</span>
+        <span>Close: ${formatUSD(latest.close)}</span>
+      </div>
+
+      <svg
+        viewBox="0 0 ${width} ${height}"
+        preserveAspectRatio="none"
+        class="market-candle-svg"
+        role="img"
+        aria-label="WBETH USDT one hour candlestick chart"
+      >
+        ${svgCandles}
+      </svg>
+    `;
+  } catch (error) {
+    container.textContent = "Unable to load live market candles.";
+    console.error("YNK Market Candle Error:", error);
+  }
+}
+
+loadMarketCandles();
