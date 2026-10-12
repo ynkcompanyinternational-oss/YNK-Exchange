@@ -25,3 +25,125 @@ document.getElementById("asset-form")?.addEventListener("submit", (event) => {
     `Request received for ${amount} ${asset}. This demo does not process payments or transfer assets. ` +
     `In production, the request will be routed to the responsible operations workflow after the required checks.`;
 });
+
+/* YNK Exchange — Live blockchain portfolio */
+const YNK_API = "https://ynk-and-co-exchange.onrender.com";
+
+function formatUSD(value) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 2
+  }).format(Number(value || 0));
+}
+
+function formatAmount(value) {
+  return new Intl.NumberFormat("en-US", {
+    maximumFractionDigits: 6
+  }).format(Number(value || 0));
+}
+
+async function loadYNKPortfolio() {
+  const status = document.getElementById("portfolio-status");
+  const connection = document.getElementById("portfolio-connection");
+
+  try {
+    const [portfolioResponse, ethResponse] = await Promise.all([
+      fetch(`${YNK_API}/wallet/ethereum/approved-portfolio`),
+      fetch(`${YNK_API}/wallet/ethereum`)
+    ]);
+
+    if (!portfolioResponse.ok) {
+      throw new Error("Portfolio API unavailable");
+    }
+
+    const portfolio = await portfolioResponse.json();
+    const eth = ethResponse.ok ? await ethResponse.json() : null;
+
+    const assets = portfolio.assets || [];
+
+    const total = assets.reduce(
+      (sum, asset) => sum + Number(asset.value_usd || 0),
+      0
+    );
+
+    document.getElementById("portfolio-total").textContent =
+      formatUSD(total);
+
+    document.getElementById("portfolio-asset-count").textContent =
+      portfolio.asset_count ?? assets.length;
+
+    document.getElementById("portfolio-eth-balance").textContent =
+      eth?.balance_eth !== undefined
+        ? `${formatAmount(eth.balance_eth)} ETH`
+        : "Unavailable";
+
+    connection.textContent =
+      portfolio.connected ? "LIVE" : "OFFLINE";
+
+    const table = document.getElementById("portfolio-table-body");
+    table.innerHTML = "";
+
+    assets.forEach((asset) => {
+      const allocation =
+        total > 0
+          ? (Number(asset.value_usd || 0) / total) * 100
+          : 0;
+
+      const row = document.createElement("tr");
+
+      row.innerHTML = `
+        <td>${asset.symbol}</td>
+        <td>${formatAmount(asset.balance)}</td>
+        <td>${formatUSD(asset.price_usd)}</td>
+        <td>${formatUSD(asset.value_usd)}</td>
+        <td>${allocation.toFixed(2)}%</td>
+      `;
+
+      table.appendChild(row);
+    });
+
+    const chart = document.getElementById("portfolio-chart");
+    chart.innerHTML = "";
+
+    const maxValue = Math.max(
+      ...assets.map(asset => Number(asset.value_usd || 0)),
+      1
+    );
+
+    assets.forEach((asset) => {
+      const value = Number(asset.value_usd || 0);
+      const allocation = total > 0 ? (value / total) * 100 : 0;
+      const width = (value / maxValue) * 100;
+
+      const item = document.createElement("div");
+      item.className = "portfolio-bar-item";
+
+      item.innerHTML = `
+        <div class="portfolio-bar-head">
+          <strong>${asset.symbol}</strong>
+          <span>${formatUSD(value)} · ${allocation.toFixed(2)}%</span>
+        </div>
+        <div class="portfolio-bar-track">
+          <div class="portfolio-bar-fill" style="width:${width}%"></div>
+        </div>
+        <small>Quantity: ${formatAmount(asset.balance)}</small>
+      `;
+
+      chart.appendChild(item);
+    });
+
+    status.textContent =
+      "Live blockchain data · Ethereum Mainnet · Read Only · Market values are indicative.";
+
+  } catch (error) {
+    connection.textContent = "ERROR";
+
+    status.textContent =
+      "Unable to load live portfolio data.";
+
+    console.error("YNK Portfolio Error:", error);
+  }
+}
+
+loadYNKPortfolio();

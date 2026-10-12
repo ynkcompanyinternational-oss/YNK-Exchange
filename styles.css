@@ -43,3 +43,208 @@ a{color:inherit;text-decoration:none}.gold-frame{position:fixed;inset:12px;point
   object-fit: contain;
   border-radius: 50%;
 }
+
+/* YNK Exchange — Live Portfolio */
+.exchange-dashboard{
+  margin-top:32px;
+  display:grid;
+  gap:18px;
+}
+
+.exchange-metrics{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:14px;
+}
+
+.exchange-metric,
+.exchange-panel{
+  background:linear-gradient(180deg,#09182b,#071321);
+  border:1px solid rgba(213,192,128,.22);
+  border-radius:16px;
+  box-shadow:0 18px 45px rgba(0,0,0,.22);
+}
+
+.exchange-metric{
+  padding:20px;
+}
+
+.exchange-metric small{
+  display:block;
+  color:#8290a5;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  font-size:11px;
+  margin-bottom:10px;
+}
+
+.exchange-metric strong{
+  display:block;
+  color:#f3f5f7;
+  font-size:clamp(20px,2.2vw,31px);
+  font-weight:600;
+}
+
+.exchange-panel{
+  padding:22px;
+}
+
+.exchange-panel h3{
+  margin:0 0 20px;
+  color:#f5f2e8;
+  font-size:20px;
+}
+
+.exchange-table-wrap{
+  overflow-x:auto;
+}
+
+.exchange-table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:760px;
+}
+
+.exchange-table th{
+  color:#7f8da1;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+  text-align:right;
+  padding:12px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.exchange-table th:first-child{
+  text-align:left;
+}
+
+.exchange-table td{
+  padding:15px 12px;
+  text-align:right;
+  color:#dfe5ed;
+  border-bottom:1px solid rgba(255,255,255,.055);
+}
+
+.exchange-table td:first-child{
+  text-align:left;
+  font-weight:700;
+  color:#d5c080;
+}
+
+#portfolio-status{
+  margin:0;
+  padding:12px 4px;
+  color:#8f9bae;
+  font-size:12px;
+}
+
+@media(max-width:900px){
+  .exchange-metrics{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+
+@media(max-width:560px){
+  .exchange-metrics{
+    grid-template-columns:1fr;
+  }
+
+  .exchange-panel{
+    padding:16px;
+  }
+}
+
+
+/* Exchange chart */
+#portfolio-chart{
+  display:grid;
+  gap:18px;
+}
+
+.portfolio-bar-item{
+  padding:12px 0;
+  border-bottom:1px solid rgba(255,255,255,.055);
+}
+
+.portfolio-bar-item:last-child{
+  border-bottom:0;
+}
+
+.portfolio-bar-head{
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  align-items:center;
+  margin-bottom:9px;
+}
+
+.portfolio-bar-head strong{
+  color:#f5f2e8;
+  font-size:14px;
+  letter-spacing:.04em;
+}
+
+.portfolio-bar-head span{
+  color:#d5c080;
+  font-size:13px;
+  font-variant-numeric:tabular-nums;
+}
+
+.portfolio-bar-track{
+  width:100%;
+  height:8px;
+  overflow:hidden;
+  border-radius:999px;
+  background:#101f31;
+  border:1px solid rgba(255,255,255,.04);
+}
+
+.portfolio-bar-fill{
+  height:100%;
+  min-width:3px;
+  border-radius:999px;
+  background:linear-gradient(
+    90deg,
+    #8f6d2a,
+    #d5c080
+  );
+  box-shadow:0 0 12px rgba(213,192,128,.18);
+}
+
+.portfolio-bar-item small{
+  display:block;
+  margin-top:7px;
+  color:#748399;
+  font-size:11px;
+  font-variant-numeric:tabular-nums;
+}
+
+.exchange-table tbody tr{
+  transition:background .18s ease;
+}
+
+.exchange-table tbody tr:hover{
+  background:rgba(213,192,128,.045);
+}
+
+.exchange-table td{
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+}
+
+#portfolio-connection{
+  color:#7fd5a0;
+}
+
+#portfolio-total{
+  color:#d5c080;
+}
+
+@media(max-width:600px){
+  .portfolio-bar-head{
+    align-items:flex-start;
+    flex-direction:column;
+    gap:3px;
+  }
+}

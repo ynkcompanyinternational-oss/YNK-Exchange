@@ -80,46 +80,69 @@
     </section>
 
     <section id="investments" class="section investment-section">
-      <div class="section-head">
-        <p class="eyebrow">INVESTMENTS</p>
-        <h2>Market intelligence with a refined interface.</h2>
-        <p>Illustrative dashboard visuals are separated from the public portfolio link so that visitors can distinguish presentation data from externally verifiable information.</p>
-      </div>
-      <div class="dashboard">
-        <div class="dashboard-main glass-card">
-          <div class="metric-row">
-            <div><small>Portfolio view</small><strong>Strategic Assets</strong></div>
-            <div><small>Market mode</small><strong>Live / External</strong></div>
-            <div><small>Reference</small><strong>Public portfolio</strong></div>
-          </div>
-          <div class="chart-wrap">
-            <svg viewBox="0 0 800 300" preserveAspectRatio="none" aria-label="Illustrative portfolio performance chart">
-              <defs>
-                <linearGradient id="goldLine" x1="0" x2="1"><stop offset="0" stop-color="#9b7a35"/><stop offset=".5" stop-color="#d7bd79"/><stop offset="1" stop-color="#8f6d2a"/></linearGradient>
-                <linearGradient id="goldFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c7a85d" stop-opacity=".24"/><stop offset="1" stop-color="#c7a85d" stop-opacity="0"/></linearGradient>
-              </defs>
-              <path class="area" d="M0 250 C80 225 90 240 150 205 S230 210 280 175 S360 190 410 140 S500 165 545 110 S620 135 680 78 S735 95 800 35 L800 300 L0 300Z"/>
-              <path class="line" d="M0 250 C80 225 90 240 150 205 S230 210 280 175 S360 190 410 140 S500 165 545 110 S620 135 680 78 S735 95 800 35"/>
-            </svg>
-          </div>
-          <div class="legend"><span>Illustrative performance visualization</span><span>Not investment advice</span></div>
-          <a class="btn btn-gold" href="https://investidor10.com.br/wallet/public/2917946" target="_blank" rel="noopener">View YNK & Co. public portfolio ↗</a>
-        </div>
-        <aside class="glass-card allocation">
-          <h3>Asset allocation</h3>
-          <div class="donut"></div>
-          <ul>
-            <li><span></span>Equities <b>—</b></li>
-            <li><span></span>Funds / ETFs <b>—</b></li>
-            <li><span></span>Digital assets <b>—</b></li>
-            <li><span></span>Other strategic assets <b>—</b></li>
-          </ul>
-          <small>Percentages intentionally omitted until connected to an authoritative live data source.</small>
-        </aside>
-      </div>
-    </section>
+  <div class="section-head">
+    <p class="eyebrow">YNK EXCHANGE • LIVE PORTFOLIO</p>
+    <h2>Digital Asset Portfolio</h2>
+    <p>Read-only blockchain monitoring with live balances and indicative market values.</p>
+  </div>
 
-    <section id="digital-assets" class="section">
+  <div class="exchange-dashboard">
+
+    <div class="exchange-metrics">
+      <div class="exchange-metric">
+        <small>Portfolio Value</small>
+        <strong id="portfolio-total">Loading...</strong>
+      </div>
+
+      <div class="exchange-metric">
+        <small>Assets</small>
+        <strong id="portfolio-asset-count">—</strong>
+      </div>
+
+      <div class="exchange-metric">
+        <small>ETH Balance</small>
+        <strong id="portfolio-eth-balance">—</strong>
+      </div>
+
+      <div class="exchange-metric">
+        <small>Status</small>
+        <strong id="portfolio-connection">Connecting</strong>
+      </div>
+    </div>
+
+    <div class="exchange-panel">
+      <h3>Asset Value Distribution</h3>
+      <div id="portfolio-chart"></div>
+    </div>
+
+    <div class="exchange-panel">
+      <h3>Holdings</h3>
+      <div class="exchange-table-wrap">
+        <table class="exchange-table">
+          <thead>
+            <tr>
+              <th>Asset</th>
+              <th>Quantity</th>
+              <th>Price</th>
+              <th>Value</th>
+              <th>Allocation</th>
+            </tr>
+          </thead>
+          <tbody id="portfolio-table-body">
+            <tr>
+              <td colspan="5">Connecting to portfolio...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <p id="portfolio-status">Connecting to YNK secure backend...</p>
+
+  </div>
+</section>
+
+<section id="digital-assets" class="section">
       <div class="section-head">
         <p class="eyebrow">DIGITAL ASSETS</p>
         <h2>A simple request-to-settlement experience.</h2>
