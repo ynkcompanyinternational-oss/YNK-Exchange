@@ -163,6 +163,7 @@ def ethereum_assets():
             assets.append({
                 "symbol": token.get("symbol"),
                 "name": token.get("name"),
+                "contract_address": token.get("address_hash"),
                 "balance": balance,
                 "price_usd": price_usd,
                 "value_usd": balance * price_usd if price_usd else None
