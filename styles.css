@@ -640,3 +640,308 @@ a{color:inherit;text-decoration:none}.gold-frame{position:fixed;inset:12px;point
   background:#06111e;
   color:#8f9bae;
 }
+
+/* YNK Exchange — Premium Dashboard Override */
+
+.investment-section{
+  position:relative;
+  overflow:hidden;
+}
+
+.investment-section::before{
+  content:"";
+  position:absolute;
+  width:520px;
+  height:520px;
+  top:100px;
+  right:-220px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(213,192,128,.08),transparent 68%);
+  pointer-events:none;
+}
+
+.exchange-dashboard{
+  position:relative;
+  margin-top:38px;
+  display:grid;
+  gap:24px;
+}
+
+.exchange-metrics{
+  display:grid;
+  grid-template-columns:repeat(12,minmax(0,1fr));
+  gap:14px;
+}
+
+.exchange-metric{
+  position:relative;
+  overflow:hidden;
+  grid-column:span 2;
+  min-height:132px;
+  padding:22px;
+  border-radius:18px;
+  border:1px solid rgba(213,192,128,.16);
+  background:
+    radial-gradient(circle at top right,rgba(213,192,128,.08),transparent 42%),
+    linear-gradient(145deg,#0a1a2d,#06111f);
+  box-shadow:
+    0 22px 55px rgba(0,0,0,.28),
+    inset 0 1px 0 rgba(255,255,255,.025);
+}
+
+.exchange-metric:first-child{
+  grid-column:span 4;
+}
+
+.exchange-metric::after{
+  content:"";
+  position:absolute;
+  width:90px;
+  height:90px;
+  border-radius:50%;
+  right:-36px;
+  bottom:-42px;
+  border:1px solid rgba(213,192,128,.08);
+}
+
+.exchange-metric small{
+  display:block;
+  margin-bottom:14px;
+  color:#74859a;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+}
+
+.exchange-metric strong{
+  display:block;
+  color:#f6f7f8;
+  font-size:clamp(20px,2vw,32px);
+  font-weight:500;
+  letter-spacing:-.025em;
+  line-height:1.15;
+}
+
+.exchange-metric:first-child strong{
+  color:#e1cf95;
+  font-size:clamp(27px,3.2vw,44px);
+}
+
+.exchange-panel{
+  position:relative;
+  overflow:hidden;
+  padding:28px;
+  border-radius:20px;
+  border:1px solid rgba(213,192,128,.14);
+  background:
+    radial-gradient(circle at 90% 0%,rgba(213,192,128,.055),transparent 28%),
+    linear-gradient(160deg,#09192b,#06111e);
+  box-shadow:0 26px 65px rgba(0,0,0,.27);
+}
+
+.exchange-panel h3{
+  margin:0 0 24px;
+  color:#f4f1e8;
+  font-size:18px;
+  font-weight:500;
+  letter-spacing:.01em;
+}
+
+#portfolio-chart{
+  gap:20px;
+}
+
+.portfolio-bar-item{
+  padding:13px 0;
+  border-bottom:1px solid rgba(255,255,255,.045);
+}
+
+.portfolio-bar-item:last-child{
+  border-bottom:0;
+}
+
+.portfolio-bar-head strong{
+  color:#f3f5f7;
+  font-size:14px;
+  letter-spacing:.04em;
+}
+
+.portfolio-bar-head span{
+  color:#9ba8b8;
+  font-size:12px;
+}
+
+.portfolio-bar-track{
+  height:6px;
+  margin:10px 0 7px;
+  overflow:hidden;
+  border-radius:999px;
+  background:#0d2034;
+}
+
+.portfolio-bar-fill{
+  height:100%;
+  border-radius:999px;
+  background:linear-gradient(90deg,#9a7a36,#e0ca86);
+  box-shadow:0 0 18px rgba(213,192,128,.15);
+}
+
+.market-chart-panel{
+  padding:28px;
+}
+
+.market-chart-header{
+  padding-bottom:18px;
+  margin-bottom:20px;
+  border-bottom:1px solid rgba(255,255,255,.055);
+}
+
+.market-chart-header small{
+  color:#b79a59;
+  font-weight:700;
+  letter-spacing:.18em;
+}
+
+.market-chart-header h3{
+  margin-top:7px;
+  font-size:22px;
+  color:#f5f3ed;
+}
+
+.market-chart-header > span{
+  border:1px solid rgba(213,192,128,.24);
+  background:rgba(213,192,128,.05);
+  color:#d9c47f;
+}
+
+#market-candlestick-chart{
+  min-height:390px;
+  display:block;
+  padding:18px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.045);
+  background:
+    linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px),
+    #05101c;
+  background-size:48px 48px;
+}
+
+.market-chart-meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:18px;
+  margin-bottom:16px;
+  color:#8d9bad;
+  font-size:11px;
+  letter-spacing:.04em;
+}
+
+.market-candle-svg{
+  display:block;
+  width:100%;
+  height:330px;
+}
+
+.exchange-table-wrap{
+  overflow-x:auto;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.045);
+}
+
+.exchange-table{
+  min-width:760px;
+  background:rgba(3,10,18,.28);
+}
+
+.exchange-table th{
+  padding:15px 14px;
+  color:#738397;
+  background:rgba(255,255,255,.018);
+  font-size:10px;
+  letter-spacing:.14em;
+}
+
+.exchange-table td{
+  padding:17px 14px;
+  color:#d7dee8;
+  border-bottom:1px solid rgba(255,255,255,.045);
+}
+
+.exchange-table td:first-child{
+  color:#dcc783;
+  letter-spacing:.04em;
+}
+
+.exchange-table tbody tr{
+  transition:background .2s ease;
+}
+
+.exchange-table tbody tr:hover{
+  background:rgba(213,192,128,.035);
+}
+
+#portfolio-status{
+  padding:4px 6px 0;
+  color:#6f7f93;
+  font-size:11px;
+  letter-spacing:.035em;
+}
+
+@media(max-width:1100px){
+  .exchange-metric{
+    grid-column:span 4;
+  }
+
+  .exchange-metric:first-child{
+    grid-column:span 8;
+  }
+}
+
+@media(max-width:760px){
+  .exchange-metrics{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .exchange-metric,
+  .exchange-metric:first-child{
+    grid-column:auto;
+  }
+
+  .exchange-metric:first-child{
+    grid-column:1 / -1;
+  }
+
+  .exchange-panel,
+  .market-chart-panel{
+    padding:20px;
+  }
+
+  #market-candlestick-chart{
+    min-height:320px;
+    padding:12px;
+  }
+
+  .market-candle-svg{
+    height:270px;
+  }
+}
+
+@media(max-width:520px){
+  .exchange-metrics{
+    grid-template-columns:1fr;
+  }
+
+  .exchange-metric:first-child{
+    grid-column:auto;
+  }
+
+  .exchange-metric{
+    min-height:110px;
+  }
+
+  .market-chart-meta{
+    gap:10px 14px;
+  }
+}
