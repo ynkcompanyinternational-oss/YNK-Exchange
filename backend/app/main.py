@@ -281,3 +281,45 @@ def ethereum_approved_portfolio():
         "asset_count": len(approved),
         "assets": approved
     }
+
+@app.get("/market/candles")
+def market_candles():
+    try:
+        response = requests.get(
+            "https://api.binance.com/api/v3/klines",
+            params={
+                "symbol": "WBETHUSDT",
+                "interval": "1h",
+                "limit": 100
+            },
+            timeout=15
+        )
+
+        response.raise_for_status()
+        data = response.json()
+
+        candles = []
+
+        for item in data:
+            candles.append({
+                "time": item[0],
+                "open": float(item[1]),
+                "high": float(item[2]),
+                "low": float(item[3]),
+                "close": float(item[4]),
+                "volume": float(item[5])
+            })
+
+        return {
+            "connected": True,
+            "source": "Binance Spot",
+            "symbol": "WBETHUSDT",
+            "interval": "1h",
+            "candles": candles
+        }
+
+    except Exception as e:
+        return {
+            "connected": False,
+            "error": str(e)
+        }
