@@ -182,3 +182,39 @@ def ethereum_assets():
             "mode": "READ_ONLY",
             "error": str(e)
         }
+
+
+@app.get("/wallet/ethereum/portfolio")
+def ethereum_portfolio():
+    raw = ethereum_assets()
+
+    if not raw.get("connected"):
+        return raw
+
+    filtered = []
+
+    for asset in raw.get("assets", []):
+        value_usd = asset.get("value_usd")
+
+        if value_usd is None:
+            continue
+
+        if value_usd < 100:
+            continue
+
+        filtered.append(asset)
+
+    filtered.sort(
+        key=lambda item: item.get("value_usd") or 0,
+        reverse=True
+    )
+
+    return {
+        "connected": True,
+        "network": "Ethereum Mainnet",
+        "mode": "READ_ONLY",
+        "valuation": "INDICATIVE",
+        "asset_count": len(filtered[:100]),
+        "assets": filtered[:100],
+        "note": "Filtered view. Token prices and valuations must be verified before being treated as portfolio value."
+    }
