@@ -1,8 +1,21 @@
 import os
 import requests
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="YNK & Co. Exchange API")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "https://ynkcompanyinternational-oss.github.io",
+        "https://ynk.exchange"
+    ],
+    allow_credentials=False,
+    allow_methods=["GET"],
+    allow_headers=["*"],
+)
+
 
 
 @app.get("/")
@@ -218,4 +231,53 @@ def ethereum_portfolio():
         "asset_count": len(filtered[:100]),
         "assets": filtered[:100],
         "note": "Filtered view. Token prices and valuations must be verified before being treated as portfolio value."
+    }
+
+
+@app.get("/wallet/ethereum/approved-portfolio")
+def ethereum_approved_portfolio():
+    raw = ethereum_assets()
+
+    if not raw.get("connected"):
+        return raw
+
+    approved_contracts = {
+        "0xa2e3356610840701bdf5611a53974510ae27e2e1",  # WBETH
+        "0xdac17f958d2ee523a2206206994597c13d831ec7",  # USDT
+        "0x8d0d000ee44948fc98c9b98a4fa4921476f08b0d",  # USD1
+        "0x514910771af9ca656af840dff83e8264ecf986ca",  # LINK
+        "0x45804880de22913dafe09f4980848ece6ecbaf78",  # PAXG
+        "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",  # UNI
+        "0x57e114b691db790c35207b2e685d4a43181e6061",  # ENA
+        "0xd533a949740bb3306d119cc777fa900ba034cd52",  # CRV
+        "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",  # WBTC
+        "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9"   # AAVE
+    }
+
+    approved = []
+
+    for asset in raw.get("assets", []):
+        contract = (asset.get("contract_address") or "").lower()
+
+        if contract in approved_contracts:
+            approved.append({
+                "symbol": asset.get("symbol"),
+                "name": asset.get("name"),
+                "balance": asset.get("balance"),
+                "price_usd": asset.get("price_usd"),
+                "value_usd": asset.get("value_usd")
+            })
+
+    approved.sort(
+        key=lambda item: item.get("value_usd") or 0,
+        reverse=True
+    )
+
+    return {
+        "connected": True,
+        "network": "Ethereum Mainnet",
+        "mode": "READ_ONLY",
+        "portfolio_type": "APPROVED_CONTRACTS",
+        "asset_count": len(approved),
+        "assets": approved
     }
