@@ -120,3 +120,65 @@ def ethereum_wallet():
             "mode": "READ_ONLY",
             "error": str(e)
         }
+
+
+@app.get("/wallet/ethereum/assets")
+def ethereum_assets():
+    wallet = os.getenv("ETH_WALLET_ADDRESS")
+
+    if not wallet:
+        return {
+            "connected": False,
+            "mode": "READ_ONLY",
+            "error": "Wallet address not configured"
+        }
+
+    try:
+        response = requests.get(
+            f"https://eth.blockscout.com/api/v2/addresses/{wallet}/token-balances",
+            timeout=20
+        )
+        response.raise_for_status()
+        data = response.json()
+
+        assets = []
+
+        for item in data:
+            token = item.get("token") or {}
+
+            if token.get("type") != "ERC-20":
+                continue
+
+            decimals = int(token.get("decimals") or 0)
+            raw_value = int(item.get("value") or 0)
+
+            balance = (
+                raw_value / (10 ** decimals)
+                if decimals >= 0 else raw_value
+            )
+
+            exchange_rate = token.get("exchange_rate")
+            price_usd = float(exchange_rate) if exchange_rate else None
+
+            assets.append({
+                "symbol": token.get("symbol"),
+                "name": token.get("name"),
+                "balance": balance,
+                "price_usd": price_usd,
+                "value_usd": balance * price_usd if price_usd else None
+            })
+
+        return {
+            "connected": True,
+            "network": "Ethereum Mainnet",
+            "mode": "READ_ONLY",
+            "asset_count": len(assets),
+            "assets": assets
+        }
+
+    except Exception as e:
+        return {
+            "connected": False,
+            "mode": "READ_ONLY",
+            "error": str(e)
+        }
