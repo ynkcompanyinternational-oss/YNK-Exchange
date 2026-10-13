@@ -84,16 +84,16 @@
     <p>Read-only blockchain monitoring with live balances and indicative market values.</p>
   </div>
 
-  <div class="exchange-dashboard">
+  <div class="exchange-dashboard reference-dashboard">
 
-    <div class="exchange-metrics">
-      <div class="exchange-metric">
-        <small>Asset Balance (USD)</small>
+    <div class="exchange-metrics reference-metrics">
+      <div class="exchange-metric balance-card">
+        <small>Total Balance</small>
         <strong id="portfolio-total">Loading...</strong>
       </div>
 
       <div class="exchange-metric">
-        <small>My Assets</small>
+        <small>Assets</small>
         <strong id="portfolio-asset-count">—</strong>
       </div>
 
@@ -102,48 +102,55 @@
         <strong id="portfolio-eth-balance">—</strong>
       </div>
 
-      <div class="exchange-metric">
-        <small>Received Transfers</small>
+      <div class="exchange-metric status-card">
+        <small>Connection</small>
+        <strong id="portfolio-connection">Connecting</strong>
+      </div>
+
+      <div class="exchange-metric transfer-card">
+        <small>Received</small>
         <strong id="received-transfers">—</strong>
       </div>
 
-      <div class="exchange-metric">
-        <small>Sent Transfers</small>
+      <div class="exchange-metric transfer-card">
+        <small>Sent</small>
         <strong id="sent-transfers">—</strong>
       </div>
-
-      <div class="exchange-metric">
-        <small>Status</small>
-        <strong id="portfolio-connection">Connecting</strong>
-      </div>
     </div>
 
-    <div class="exchange-panel">
-      <h3>My Assets by Value</h3>
-      <div id="portfolio-chart"></div>
-    </div>
+    <div class="reference-main-grid">
 
-    <div class="exchange-panel market-chart-panel">
-      <div class="market-chart-header">
-        <div>
-          <small>LIVE MARKET</small>
-          <h3>WBETH / USDT</h3>
+      <div class="exchange-panel market-chart-panel reference-market">
+        <div class="market-chart-header">
+          <div>
+            <small>LIVE MARKET</small>
+            <h3>WBETH / USDT</h3>
+          </div>
+          <span>1H</span>
         </div>
-        <span>1H</span>
+
+        <div id="market-candlestick-chart">
+          Connecting to live market data...
+        </div>
       </div>
-      <div id="market-candlestick-chart">
-        Connecting to live market data...
+
+      <div class="exchange-panel reference-allocation">
+        <div class="panel-kicker">PORTFOLIO</div>
+        <h3>Asset Allocation</h3>
+        <div id="portfolio-chart"></div>
       </div>
+
     </div>
 
-<div class="premium-feature power-mind-feature">
-      <p class="eyebrow">PRIVATE COMMUNITY</p>
-      <h2>Power Mind</h2>
-      <p>Strategy, performance, high-level connections and exclusive experiences for ambitious minds.</p>
-    </div>
+    <div class="exchange-panel reference-assets">
+      <div class="reference-panel-head">
+        <div>
+          <div class="panel-kicker">PORTFOLIO</div>
+          <h3>My Assets</h3>
+        </div>
+        <span class="live-pill">LIVE</span>
+      </div>
 
-<div class="exchange-panel">
-      <h3>My Assets</h3>
       <div class="exchange-table-wrap">
         <table class="exchange-table">
           <thead>
@@ -164,14 +171,17 @@
       </div>
     </div>
 
+    <div class="premium-feature power-mind-feature">
+      <p class="eyebrow">PRIVATE COMMUNITY</p>
+      <h2>Power Mind</h2>
+      <p>Strategy, performance, high-level connections and exclusive experiences for ambitious minds.</p>
+    </div>
+
     <div class="premium-feature billionaires-club">
       <p class="eyebrow">PRIVATE CIRCLE</p>
       <h2>Billionaires Club</h2>
       <p>Global connections, strategic relationships and exclusive experiences for a high-level private circle.</p>
-      <a href="https://thebillionairesclubinc.com/" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">External Reference →</a>
     </div>
-
-
 
     <p id="portfolio-status">Connecting to YNK secure backend...</p>
 
@@ -188,11 +198,7 @@
 
   <div class="ccc-grid">
     <article class="glass-card ccc-hero-card">
-      <div class="ccc-coin-wrap">
-        <img src="assets/carbon-credit-coin.jpg" alt="Carbon Credit Coin logo" class="ccc-coin-image">
-      </div>
-
-      <div class="ccc-hero-copy">
+<div class="ccc-hero-copy">
         <p class="eyebrow">STRATEGIC DIGITAL ASSET</p>
         <h3>Carbon Credit Coin</h3>
         <p>A Link Company project designed as a carbon-focused digital asset concept for future strategic development.</p>
