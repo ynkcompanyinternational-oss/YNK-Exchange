@@ -92,8 +92,14 @@ async function loadYNKPortfolio() {
 
       const row = document.createElement("tr");
 
+      const networkLabel =
+        asset.symbol === "ETH"
+          ? "Ethereum"
+          : "Ethereum · ERC-20";
+
       row.innerHTML = `
         <td>${asset.symbol}</td>
+        <td>${networkLabel}</td>
         <td>${formatAmount(asset.balance)}</td>
         <td>${formatUSD(asset.price_usd)}</td>
         <td>${formatUSD(asset.value_usd)}</td>
