@@ -148,6 +148,32 @@ async function loadYNKPortfolio() {
 
 loadYNKPortfolio();
 
+
+async function loadEthereumTransactions() {
+  try {
+    const response = await fetch(`${YNK_API}/wallet/ethereum/transactions`);
+    const data = await response.json();
+
+    const receivedEl = document.getElementById("received-transfers");
+    const sentEl = document.getElementById("sent-transfers");
+
+    if (!data.connected) {
+      if (receivedEl) receivedEl.textContent = "—";
+      if (sentEl) sentEl.textContent = "—";
+      return;
+    }
+
+    if (receivedEl) receivedEl.textContent = data.received ?? "—";
+    if (sentEl) sentEl.textContent = data.sent ?? "—";
+  } catch (error) {
+    const receivedEl = document.getElementById("received-transfers");
+    const sentEl = document.getElementById("sent-transfers");
+
+    if (receivedEl) receivedEl.textContent = "—";
+    if (sentEl) sentEl.textContent = "—";
+  }
+}
+
 async function loadMarketCandles() {
   const container = document.getElementById("market-candlestick-chart");
   if (!container) return;
@@ -358,3 +384,5 @@ async function loadMarketCandles() {
 }
 
 loadMarketCandles();
+
+loadEthereumTransactions();

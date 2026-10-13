@@ -325,3 +325,53 @@ def market_candles():
             "connected": False,
             "error": str(e)
         }
+
+@app.get("/wallet/ethereum/transactions")
+def ethereum_transactions():
+    wallet = os.getenv("ETH_WALLET_ADDRESS")
+
+    if not wallet:
+        return {
+            "connected": False,
+            "mode": "READ_ONLY",
+            "error": "Wallet address not configured"
+        }
+
+    try:
+        response = requests.get(
+            f"https://eth.blockscout.com/api/v2/addresses/{wallet}/transactions",
+            timeout=20
+        )
+        response.raise_for_status()
+        data = response.json()
+
+        received = 0
+        sent = 0
+
+        for tx in data.get("items", []):
+            from_address = ((tx.get("from") or {}).get("hash") or "").lower()
+            to_address = ((tx.get("to") or {}).get("hash") or "").lower()
+
+            wallet_lower = wallet.lower()
+
+            if to_address == wallet_lower:
+                received += 1
+
+            if from_address == wallet_lower:
+                sent += 1
+
+        return {
+            "connected": True,
+            "network": "Ethereum Mainnet",
+            "mode": "READ_ONLY",
+            "received": received,
+            "sent": sent,
+            "transaction_count": len(data.get("items", []))
+        }
+
+    except Exception as e:
+        return {
+            "connected": False,
+            "mode": "READ_ONLY",
+            "error": str(e)
+        }
