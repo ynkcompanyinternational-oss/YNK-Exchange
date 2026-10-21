@@ -328,50 +328,193 @@ def market_candles():
 
 @app.get("/wallet/ethereum/transactions")
 def ethereum_transactions():
-    wallet = os.getenv("ETH_WALLET_ADDRESS")
+    import time
 
+    wallet = os.getenv("ETH_WALLET_ADDRESS")
     if not wallet:
-        return {
-            "connected": False,
-            "mode": "READ_ONLY",
-            "error": "Wallet address not configured"
-        }
+        return {"connected": False, "mode": "READ_ONLY",
+                "error": "Wallet not configured"}
+
+    now = time.monotonic()
+    cache = getattr(ethereum_transactions, "_cache", {})
+
+    if cache.get("wallet") == wallet and now - cache.get("time", 0) < 600:
+        return cache["result"]
+
+    url = f"https://eth.blockscout.com/api/v2/addresses/{wallet}/transactions"
+    params = {}
+    received = sent = pages = 0
+    seen = set()
+    complete = False
+    deadline = now + 20
 
     try:
-        response = requests.get(
-            f"https://eth.blockscout.com/api/v2/addresses/{wallet}/transactions",
-            timeout=20
-        )
-        response.raise_for_status()
-        data = response.json()
+        while pages < 120 and time.monotonic() < deadline:
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                break
 
-        received = 0
-        sent = 0
+            response = requests.get(
+                url, params=params,
+                timeout=(5, max(1, remaining))
+            )
+            response.raise_for_status()
+            data = response.json()
+            pages += 1
 
-        for tx in data.get("items", []):
-            from_address = ((tx.get("from") or {}).get("hash") or "").lower()
-            to_address = ((tx.get("to") or {}).get("hash") or "").lower()
+            for tx in data.get("items", []):
+                tx_hash = tx.get("hash")
+                if not tx_hash or tx_hash in seen:
+                    continue
+                seen.add(tx_hash)
 
-            wallet_lower = wallet.lower()
+                if tx.get("status") != "ok":
+                    continue
 
-            if to_address == wallet_lower:
-                received += 1
+                sender = ((tx.get("from") or {}).get("hash") or "").lower()
+                receiver = ((tx.get("to") or {}).get("hash") or "").lower()
 
-            if from_address == wallet_lower:
-                sent += 1
+                if receiver == wallet.lower():
+                    received += 1
+                if sender == wallet.lower():
+                    sent += 1
 
-        return {
+            params = data.get("next_page_params")
+            if not params:
+                complete = True
+                break
+
+        result = {
             "connected": True,
             "network": "Ethereum Mainnet",
             "mode": "READ_ONLY",
             "received": received,
             "sent": sent,
-            "transaction_count": len(data.get("items", []))
+            "transaction_count": len(seen),
+            "pages_scanned": pages,
+            "history_complete": complete
         }
 
-    except Exception as e:
+        if pages:
+            ethereum_transactions._cache = {
+                "wallet": wallet,
+                "time": time.monotonic(),
+                "result": result
+            }
+
+        return result
+
+    except requests.RequestException:
+        return {"connected": False, "mode": "READ_ONLY",
+                "error": "Transaction history unavailable"}
+
+
+@app.get("/token-terminal/projects")
+def token_terminal_projects():
+    key = os.getenv("TOKEN_TERMINAL_API_KEY")
+
+    if not key:
+        return {"connected": False, "error": "API key not configured"}
+
+    try:
+        response = requests.get(
+            "https://api.tokenterminal.com/v2/projects",
+            headers={
+                "Authorization": f"Bearer {key}",
+                "Accept": "application/json"
+            },
+            timeout=20
+        )
+
+        if response.status_code != 200:
+            return {
+                "connected": False,
+                "status_code": response.status_code
+            }
+
+        return {
+            "connected": True,
+            "source": "Token Terminal",
+            "data": response.json()
+        }
+
+    except requests.RequestException:
         return {
             "connected": False,
-            "mode": "READ_ONLY",
-            "error": str(e)
+            "error": "Token Terminal unavailable"
+        }
+
+
+@app.get("/market/coingecko")
+def coingecko_prices():
+    try:
+        r = requests.get(
+            "https://api.coingecko.com/api/v3/simple/price",
+            params={
+                "ids": "bitcoin,ethereum",
+                "vs_currencies": "usd",
+                "include_last_updated_at": "true"
+            },
+            timeout=20
+        )
+        r.raise_for_status()
+        return {
+            "connected": True,
+            "source": "CoinGecko",
+            "prices": r.json()
+        }
+    except requests.RequestException:
+        return {
+            "connected": False,
+            "source": "CoinGecko",
+            "error": "Market data unavailable"
+        }
+
+@app.get("/market/coinmarketcap")
+def coinmarketcap_prices():
+    try:
+        r = requests.get(
+            "https://pro-api.coinmarketcap.com/public-api/v2/simple/price",
+            params={
+                "id": "1,1027",
+                "convert": "USD",
+                "include_all": "true"
+            },
+            headers={"Accept": "application/json"},
+            timeout=20
+        )
+
+        r.raise_for_status()
+        data = r.json()
+
+        status = data.get("status", {})
+        if str(status.get("error_code", 0)) != "0":
+            return {
+                "connected": False,
+                "source": "CoinMarketCap",
+                "error": "Provider returned error"
+            }
+
+        prices = {}
+
+        for asset in data.get("data", []):
+            for quote in asset.get("quotes", []):
+                if quote.get("symbol") == "USD":
+                    prices[asset["slug"]] = {
+                        "usd": quote.get("price"),
+                        "change_24h": quote.get("percent_change_24h"),
+                        "updated_at": quote.get("last_updated")
+                    }
+
+        return {
+            "connected": bool(prices),
+            "source": "CoinMarketCap",
+            "prices": prices
+        }
+
+    except (requests.RequestException, ValueError, TypeError, KeyError):
+        return {
+            "connected": False,
+            "source": "CoinMarketCap",
+            "error": "Market data unavailable"
         }
