@@ -329,44 +329,93 @@ def market_candles():
 @app.get("/wallet/ethereum/transactions")
 def ethereum_transactions():
     import time
+    import threading
+    if not hasattr(ethereum_transactions, "_lock"):
+        ethereum_transactions._lock = threading.Lock()
+    if not ethereum_transactions._lock.acquire(blocking=False):
+        state = getattr(_ethereum_transactions_scan, "_state", None)
+        if state:
+            return {
+                "connected": True,
+                "network": "Ethereum Mainnet",
+                "mode": "READ_ONLY",
+                "received": state["received"],
+                "sent": state["sent"],
+                "transaction_count": len(state["seen"]),
+                "pages_scanned": state["pages"],
+                "history_complete": state["complete"],
+                "scan_in_progress": True
+            }
+        return {
+            "connected": False,
+            "mode": "READ_ONLY",
+            "error": "Initial transaction scan in progress"
+        }
+    try:
+        return _ethereum_transactions_scan()
+    finally:
+        ethereum_transactions._lock.release()
+
+def _ethereum_transactions_scan():
+    import time
 
     wallet = os.getenv("ETH_WALLET_ADDRESS")
     if not wallet:
-        return {"connected": False, "mode": "READ_ONLY",
-                "error": "Wallet not configured"}
+        return {
+            "connected": False,
+            "mode": "READ_ONLY",
+            "error": "Wallet not configured"
+        }
 
-    now = time.monotonic()
-    cache = getattr(ethereum_transactions, "_cache", {})
+    state = getattr(_ethereum_transactions_scan, "_state", None)
 
-    if cache.get("wallet") == wallet and now - cache.get("time", 0) < 600:
-        return cache["result"]
+    if state is None or state["wallet"] != wallet:
+        state = {
+            "wallet": wallet,
+            "params": {},
+            "received": 0,
+            "sent": 0,
+            "seen": set(),
+            "pages": 0,
+            "complete": False
+        }
+        _ethereum_transactions_scan._state = state
+
+    if state["complete"]:
+        return {
+            "connected": True,
+            "network": "Ethereum Mainnet",
+            "mode": "READ_ONLY",
+            "received": state["received"],
+            "sent": state["sent"],
+            "transaction_count": len(state["seen"]),
+            "pages_scanned": state["pages"],
+            "history_complete": True
+        }
 
     url = f"https://eth.blockscout.com/api/v2/addresses/{wallet}/transactions"
-    params = {}
-    received = sent = pages = 0
-    seen = set()
-    complete = False
-    deadline = now + 20
+    deadline = time.monotonic() + 20
 
     try:
-        while pages < 120 and time.monotonic() < deadline:
+        while time.monotonic() < deadline:
             remaining = deadline - time.monotonic()
             if remaining <= 0:
                 break
 
             response = requests.get(
-                url, params=params,
+                url,
+                params=state["params"],
                 timeout=(5, max(1, remaining))
             )
             response.raise_for_status()
             data = response.json()
-            pages += 1
 
             for tx in data.get("items", []):
                 tx_hash = tx.get("hash")
-                if not tx_hash or tx_hash in seen:
+                if not tx_hash or tx_hash in state["seen"]:
                     continue
-                seen.add(tx_hash)
+
+                state["seen"].add(tx_hash)
 
                 if tx.get("status") != "ok":
                     continue
@@ -375,38 +424,34 @@ def ethereum_transactions():
                 receiver = ((tx.get("to") or {}).get("hash") or "").lower()
 
                 if receiver == wallet.lower():
-                    received += 1
+                    state["received"] += 1
                 if sender == wallet.lower():
-                    sent += 1
+                    state["sent"] += 1
 
-            params = data.get("next_page_params")
-            if not params:
-                complete = True
+            state["pages"] += 1
+            state["params"] = data.get("next_page_params")
+
+            if not state["params"]:
+                state["complete"] = True
                 break
 
-        result = {
+        return {
             "connected": True,
             "network": "Ethereum Mainnet",
             "mode": "READ_ONLY",
-            "received": received,
-            "sent": sent,
-            "transaction_count": len(seen),
-            "pages_scanned": pages,
-            "history_complete": complete
+            "received": state["received"],
+            "sent": state["sent"],
+            "transaction_count": len(state["seen"]),
+            "pages_scanned": state["pages"],
+            "history_complete": state["complete"]
         }
 
-        if pages:
-            ethereum_transactions._cache = {
-                "wallet": wallet,
-                "time": time.monotonic(),
-                "result": result
-            }
-
-        return result
-
     except requests.RequestException:
-        return {"connected": False, "mode": "READ_ONLY",
-                "error": "Transaction history unavailable"}
+        return {
+            "connected": False,
+            "mode": "READ_ONLY",
+            "error": "Transaction history temporarily unavailable"
+        }
 
 
 @app.get("/token-terminal/projects")
