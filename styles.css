@@ -1766,3 +1766,30 @@ a{color:inherit;text-decoration:none}.gold-frame{position:fixed;inset:12px;point
     padding: 14px;
   }
 }
+
+/* YNK Exchange — imagem superior da segunda página */
+.ynk-second-hero {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: hidden;
+  background: #061326;
+}
+
+.ynk-second-hero-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+@media (max-width: 600px) {
+  .ynk-second-hero {
+    width: 100%;
+  }
+}
