@@ -244,6 +244,8 @@ def ethereum_approved_portfolio():
         return raw
 
     approved_contracts = {
+        "0x9640bb4eb644d05ed5e928504cb69d00823bf7c5",  # CCC
+        "0x3fc29836e84e471a053d2d9e80494a867d670ead",  # ETHG
         "0xa2e3356610840701bdf5611a53974510ae27e2e1",  # WBETH
         "0xdac17f958d2ee523a2206206994597c13d831ec7",  # USDT
         "0x8d0d000ee44948fc98c9b98a4fa4921476f08b0d",  # USD1
@@ -269,6 +271,16 @@ def ethereum_approved_portfolio():
                 "price_usd": asset.get("price_usd"),
                 "value_usd": asset.get("value_usd")
             })
+
+    eth = ethereum_wallet()
+    if eth.get("connected") and eth.get("balance_eth") is not None:
+        approved.append({
+            "symbol": "ETH",
+            "name": "Ethereum",
+            "balance": eth["balance_eth"],
+            "price_usd": None,
+            "value_usd": None
+        })
 
     approved.sort(
         key=lambda item: item.get("value_usd") or 0,

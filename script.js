@@ -68,7 +68,9 @@ async function loadYNKPortfolio() {
     );
 
     document.getElementById("portfolio-total").textContent =
-      formatUSD(total);
+      assets.some(asset => asset.value_usd == null)
+        ? `${formatUSD(total)} (parcial)`
+        : formatUSD(total);
 
     document.getElementById("portfolio-asset-count").textContent =
       portfolio.asset_count ?? assets.length;
@@ -101,8 +103,8 @@ async function loadYNKPortfolio() {
         <td>${asset.symbol}</td>
         <td>${networkLabel}</td>
         <td>${formatAmount(asset.balance)}</td>
-        <td>${formatUSD(asset.price_usd)}</td>
-        <td>${formatUSD(asset.value_usd)}</td>
+        <td>${asset.price_usd == null ? "Sem cotação" : formatUSD(asset.price_usd)}</td>
+        <td>${asset.value_usd == null ? "Sem cotação" : formatUSD(asset.value_usd)}</td>
         <td>${allocation.toFixed(2)}%</td>
       `;
 
