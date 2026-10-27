@@ -1793,3 +1793,6 @@ a{color:inherit;text-decoration:none}.gold-frame{position:fixed;inset:12px;point
     width: 100%;
   }
 }
+
+/* Remove a moldura dourada externa */
+.gold-frame { display: none !important; }
