@@ -1708,3 +1708,25 @@ a{color:inherit;text-decoration:none}.gold-frame{position:fixed;inset:12px;point
   border-color: #f0d48c;
   box-shadow: 0 0 0 2px #d6b46a33;
 }
+
+/* YNK Exchange — cabeçalho da segunda página */
+.site-header {
+  position: relative;
+  background: #061326;
+  border-bottom: 1px solid rgba(191, 158, 93, 0.22);
+}
+
+.site-header .ynk-top-logo {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.site-header .ynk-top-logo img {
+  max-width: 115px;
+  height: auto;
+  object-fit: contain;
+}
