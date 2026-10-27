@@ -1635,3 +1635,76 @@ a{color:inherit;text-decoration:none}.gold-frame{position:fixed;inset:12px;point
     padding-bottom:38px;
   }
 }
+
+/* YNK Exchange — navegação da segunda página */
+.investment-section .dashboard-actions {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 24px 0 32px;
+}
+
+.investment-section .dashboard-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 66px;
+  padding: 12px 8px;
+  border: 1px solid #b89a55;
+  border-radius: 14px;
+  background: linear-gradient(145deg, #172a43, #071222);
+  color: #e6c981;
+  font: 600 14px Inter, sans-serif;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: inset 0 1px 0 #e6c98144, 0 6px 18px #0005;
+}
+
+.investment-section .dashboard-action-primary {
+  background: linear-gradient(135deg, #f2d894, #b48a3d, #f0ce79);
+  color: #09172a;
+}
+
+.investment-section .dashboard-action:disabled {
+  opacity: .65;
+  cursor: not-allowed;
+}
+
+@media (max-width: 560px) {
+  .investment-section .dashboard-actions {
+    gap: 7px;
+  }
+  .investment-section .dashboard-action {
+    min-height: 58px;
+    padding: 8px 3px;
+    font-size: 11px;
+  }
+}
+
+/* YNK Exchange — pesquisa de ativos */
+.ynk-asset-search {
+  width: 100%;
+  margin: 22px 0 18px;
+}
+
+.ynk-asset-search input {
+  width: 100%;
+  min-height: 52px;
+  padding: 14px 20px;
+  border: 1px solid #b89a55;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #13243b, #071321);
+  color: #f0dba5;
+  font-size: 15px;
+  box-shadow: inset 0 1px 0 #e6c98133, 0 8px 24px #0004;
+}
+
+.ynk-asset-search input::placeholder {
+  color: #b7a57f;
+}
+
+.ynk-asset-search input:focus {
+  outline: none;
+  border-color: #f0d48c;
+  box-shadow: 0 0 0 2px #d6b46a33;
+}

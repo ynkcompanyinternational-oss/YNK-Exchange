@@ -392,3 +392,28 @@ async function loadMarketCandles() {
 loadMarketCandles();
 
 loadEthereumTransactions();
+
+/* YNK Exchange — pesquisa local de ativos */
+document.addEventListener('DOMContentLoaded', () => {
+  const busca = document.getElementById('ynk-asset-search');
+  const tabela = document.getElementById('portfolio-table-body');
+
+  if (!busca || !tabela) return;
+
+  const filtrar = () => {
+    const termo = busca.value.trim().toLocaleLowerCase('pt-BR');
+
+    tabela.querySelectorAll('tr').forEach(linha => {
+      const conteudo = linha.textContent.toLocaleLowerCase('pt-BR');
+      linha.hidden = termo !== '' && !conteudo.includes(termo);
+    });
+  };
+
+  busca.addEventListener('input', filtrar);
+
+  new MutationObserver(filtrar).observe(tabela, {
+    childList: true,
+    subtree: true,
+    characterData: true
+  });
+});
