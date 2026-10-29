@@ -77,6 +77,9 @@ body {
 
 
 <div id="ynk-wallet-actions" class="ynk-wallet-actions">
+  <a class="ynk-wallet-link" href="comprar.html">Comprar</a>
+  <a class="ynk-wallet-link" href="vender.html">Vender</a>
+
   <button type="button" id="ynk-connect-wallet">Conectar Carteira</button>
   <button type="button" disabled>Receber</button>
   <button type="button" disabled>Enviar</button>
@@ -388,5 +391,20 @@ body {
 })();
 </script>
 
+
+<style>
+.ynk-wallet-actions .ynk-wallet-link {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(145deg,#0b1e34,#061326);
+  color:#d5c080;
+  border:1px solid #b79a59;
+  border-radius:12px;
+  padding:16px;
+  font-weight:600;
+  text-decoration:none;
+}
+</style>
 </body>
 </html>
