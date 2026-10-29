@@ -85,7 +85,7 @@ body {
 
 
   <button type="button" id="ynk-connect-wallet">Conectar Carteira</button>
-  <button type="button" disabled>Receber</button>
+  <button type="button" id="ynk-receive-wallet">Receber</button>
   <button type="button" disabled>Enviar</button>
 </div>
 
@@ -410,5 +410,64 @@ body {
   text-decoration:none;
 }
 </style>
+
+<script id="ynk-receive-script">
+(function () {
+  const btn = document.getElementById("ynk-receive-wallet");
+  if (!btn) return;
+
+  btn.addEventListener("click", async function () {
+    try {
+      const provider = window.ethereum;
+      if (!provider) {
+        alert("Abra a página no navegador da sua carteira Ethereum.");
+        return;
+      }
+
+      const accounts = await provider.request({
+        method: "eth_accounts"
+      });
+
+      if (!accounts || !accounts.length) {
+        alert("Conecte sua carteira primeiro.");
+        return;
+      }
+
+      const chainId = await provider.request({
+        method: "eth_chainId"
+      });
+
+      if (chainId !== "0x1") {
+        alert("Selecione a rede Ethereum Mainnet para receber nesta rede.");
+        return;
+      }
+
+      const address = accounts[0];
+
+      if (!/^0x[a-fA-F0-9]{40}$/.test(address)) {
+        alert("Endereço da carteira inválido.");
+        return;
+      }
+
+      const copiar = confirm(
+        "Endereço público Ethereum:\n\n" +
+        address +
+        "\n\nDeseja copiar?"
+      );
+
+      if (copiar) {
+        try {
+          await navigator.clipboard.writeText(address);
+          alert("Endereço copiado com sucesso.");
+        } catch (e) {
+          prompt("Copie o endereço abaixo:", address);
+        }
+      }
+    } catch (error) {
+      alert("Não foi possível consultar a carteira conectada.");
+    }
+  });
+})();
+</script>
 </body>
 </html>
