@@ -1986,3 +1986,229 @@ main#home .dashboard-action-primary:hover {
     background: #25282d !important;
 }
 /* FIM YNK BOTAO PRINCIPAL */
+
+
+/* YNK SEGUNDA PAGINA TRANSPARENTE */
+main#home {
+    background-image: url("assets/ynk-fundo-interno.png") !important;
+    background-size: cover !important;
+    background-position: center top !important;
+    background-repeat: no-repeat !important;
+    background-color: transparent !important;
+}
+
+main#home > section,
+main#home .dashboard,
+main#home .dashboard-panel,
+main#home .reference-assets,
+main#home .ynk-second-hero {
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+/* FIM YNK SEGUNDA PAGINA TRANSPARENTE */
+
+
+/* YNK FUNDO INTERNO DEFINITIVO */
+main#home {
+    background: url("assets/ynk-fundo-interno.png")
+                center top / 100% 100% no-repeat !important;
+}
+
+main#home > section,
+main#home .dashboard,
+main#home .reference-assets {
+    background: transparent !important;
+    background-image: none !important;
+}
+/* FIM YNK FUNDO INTERNO DEFINITIVO */
+
+
+/* YNK FUNDO PADRAO 20261029 */
+html {
+  min-height: 100%;
+  background: #030b19;
+}
+body {
+  min-height: 100vh;
+  background-image: url("fundo-padrao.png") !important;
+  background-position: center top !important;
+  background-size: cover !important;
+  background-attachment: fixed !important;
+  background-repeat: no-repeat !important;
+}
+
+/* YNK EXCHANGE — GRADE DO MENU PRINCIPAL */
+
+.dashboard-actions {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px !important;
+  width: 100%;
+  max-width: 850px;
+  margin: 20px auto 28px !important;
+}
+
+.dashboard-actions .dashboard-action {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  min-height: 76px;
+  padding: 16px 10px !important;
+  text-align: center;
+  font-weight: 600;
+  letter-spacing: .3px;
+  text-decoration: none;
+  background: linear-gradient(
+    145deg,
+    #141820,
+    #071426 55%,
+    #020408
+  ) !important;
+  border: 1px solid #18283a !important;
+  border-radius: 18px !important;
+  color: #edf1f6 !important;
+}
+
+@media (max-width: 600px) {
+  .dashboard-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px !important;
+    padding: 0 12px;
+    box-sizing: border-box;
+  }
+
+  .dashboard-actions .dashboard-action {
+    min-height: 82px;
+  }
+}
+
+
+/* YNK EXCHANGE — GRADE DO MENU PRINCIPAL */
+
+.dashboard-actions {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px !important;
+  width: 100%;
+  max-width: 850px;
+  margin: 20px auto 28px !important;
+}
+
+.dashboard-actions .dashboard-action {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  min-height: 76px;
+  padding: 16px 10px !important;
+  text-align: center;
+  font-weight: 600;
+  letter-spacing: .3px;
+  text-decoration: none;
+  background: linear-gradient(
+    145deg,
+    #141820,
+    #071426 55%,
+    #020408
+  ) !important;
+  border: 1px solid #18283a !important;
+  border-radius: 18px !important;
+  color: #edf1f6 !important;
+}
+
+@media (max-width: 600px) {
+  .dashboard-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px !important;
+    padding: 0 12px;
+    box-sizing: border-box;
+  }
+
+  .dashboard-actions .dashboard-action {
+    min-height: 82px;
+  }
+}
+
+
+
+/* YNK MENU PRINCIPAL FINAL */
+
+body {
+  background-image: url("assets/ynk-segunda-pagina.png") !important;
+  background-position: center top !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+  background-attachment: fixed !important;
+}
+
+#investments {
+  background: transparent !important;
+  padding-top: 35px;
+}
+
+#investments .section-head {
+  background: transparent !important;
+  text-align: center;
+}
+
+#investments .section-head h2 {
+  font-weight: 600;
+  letter-spacing: 2px;
+}
+
+.ynk-asset-search {
+  max-width: 850px;
+  margin: 15px auto 24px;
+}
+
+.ynk-asset-search input {
+  width: 100%;
+  background: rgba(2,5,12,.88) !important;
+  color: #f1f4fa !important;
+  border: 1px solid #172b43 !important;
+  border-radius: 16px !important;
+  padding: 16px 20px !important;
+  outline: none;
+}
+
+.dashboard-actions {
+  display: grid !important;
+  grid-template-columns: repeat(4,minmax(0,1fr));
+  gap: 14px !important;
+  max-width: 850px;
+  margin: 20px auto 30px !important;
+}
+
+.dashboard-actions .dashboard-action {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  min-height: 85px;
+  background: linear-gradient(
+    145deg,#151922,#081426 55%,#020408
+  ) !important;
+  border: 1px solid #17283d !important;
+  border-radius: 18px !important;
+  color: #edf1f7 !important;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 8px 20px rgba(0,0,0,.28);
+}
+
+.reference-dashboard {
+  background: transparent !important;
+}
+
+@media(max-width:600px) {
+  .dashboard-actions {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    padding: 0 12px;
+  }
+
+  .dashboard-actions .dashboard-action {
+    min-height: 82px;
+  }
+
+  body {
+    background-attachment: scroll !important;
+  }
+}
