@@ -1,6 +1,7 @@
 import os
 import requests
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
+from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="YNK & Co. Exchange API")
@@ -575,3 +576,40 @@ def coinmarketcap_prices():
             "source": "CoinMarketCap",
             "error": "Market data unavailable"
         }
+
+
+# YNK Exchange — frontend independente
+from pathlib import Path as YNKPath
+
+YNK_ROOT = YNKPath(__file__).resolve().parents[2]
+
+@app.get("/index.html")
+@app.get("/mercado.html")
+@app.get("/carteira.html")
+@app.get("/comprar.html")
+@app.get("/vender.html")
+def ynk_frontend_file(request: __import__("fastapi").Request):
+    filename = request.url.path.lstrip("/")
+    path = YNK_ROOT / filename
+    if not path.is_file():
+        raise HTTPException(status_code=404)
+    return FileResponse(path)
+
+@app.get("/styles.css")
+@app.get("/script.js")
+@app.get("/mercado-chart.js")
+def ynk_frontend_asset(request: __import__("fastapi").Request):
+    filename = request.url.path.lstrip("/")
+    path = YNK_ROOT / filename
+    if not path.is_file():
+        raise HTTPException(status_code=404)
+    return FileResponse(path)
+
+from fastapi.staticfiles import StaticFiles
+
+if (YNK_ROOT / "assets").is_dir():
+    app.mount(
+        "/assets",
+        StaticFiles(directory=str(YNK_ROOT / "assets")),
+        name="ynk-assets"
+    )
