@@ -75,6 +75,34 @@ body {
   </div>
 </div>
 
+
+<div id="ynk-wallet-actions" class="ynk-wallet-actions">
+  <button type="button" id="ynk-connect-wallet">Conectar Carteira</button>
+  <button type="button" disabled>Receber</button>
+  <button type="button" disabled>Enviar</button>
+</div>
+
+<style>
+.ynk-wallet-actions {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:12px;
+  margin:25px 0;
+}
+.ynk-wallet-actions button {
+  background:linear-gradient(145deg,#0b1e34,#061326);
+  color:#d5c080;
+  border:1px solid #b79a59;
+  border-radius:12px;
+  padding:16px;
+  font-weight:600;
+}
+.ynk-wallet-actions button:disabled {
+  opacity:.65;
+  cursor:not-allowed;
+}
+</style>
+
 <h2>Meus ativos</h2>
 <div id="ynk-wallet-assets">Carregando ativos...</div>
 
@@ -311,6 +339,52 @@ body {
 
   el("ynk-wallet-status").textContent =
     "Consulta financeira concluída.";
+})();
+</script>
+
+
+<script id="ynk-web3-connect-script">
+(() => {
+  const botao = document.getElementById("ynk-connect-wallet");
+
+  botao.addEventListener("click", async () => {
+    const provider = window.ethereum;
+
+    if (!provider) {
+      alert("Abra esta página no navegador da sua carteira Ethereum.");
+      return;
+    }
+
+    try {
+      botao.disabled = true;
+      botao.textContent = "Aguardando autorização...";
+
+      const contas = await provider.request({
+        method: "eth_requestAccounts"
+      });
+
+      if (!contas || !contas.length) {
+        throw new Error("Nenhuma conta autorizada.");
+      }
+
+      const rede = await provider.request({
+        method: "eth_chainId"
+      });
+
+      if (rede !== "0x1") {
+        botao.textContent = "Conectada — rede diferente";
+        alert("Carteira conectada. Selecione Ethereum Mainnet para continuar.");
+      } else {
+        botao.textContent = "Carteira conectada";
+      }
+
+    } catch (erro) {
+      botao.textContent = "Conectar Carteira";
+      alert("Conexão não concluída: " + erro.message);
+    } finally {
+      botao.disabled = false;
+    }
+  });
 })();
 </script>
 
