@@ -110,6 +110,103 @@ body {
 }
 </style>
 
+
+<section id="ynk-otc-panel" class="ynk-otc-panel">
+  <h2>Negociação Direta | YNK & Co. INC</h2>
+  <p>Mercado corporativo independente · Ethereum Mainnet</p>
+
+  <div class="ynk-otc-grid">
+    <div class="ynk-otc-box">
+      <h3>Carteira do Cliente</h3>
+      <p>Conecte sua carteira para consultar seus ativos.</p>
+      <div id="ynk-client-assets">Aguardando conexão Web3</div>
+    </div>
+
+    <div class="ynk-otc-box">
+      <h3>Carteira Corporativa | INC</h3>
+      <p>Consulta de ativos pela integração existente.</p>
+      <div>Disponibilidade para negociação: a verificar</div>
+    </div>
+  </div>
+
+  <div class="ynk-otc-box">
+    <h3>Negociação em USDT</h3>
+
+    <label for="ynk-otc-operation">Operação</label>
+    <select id="ynk-otc-operation">
+      <option value="buy">Comprar</option>
+      <option value="sell">Vender</option>
+      <option value="swap">Trocar</option>
+    </select>
+
+    <label for="ynk-otc-asset">Ativo</label>
+    <select id="ynk-otc-asset">
+      <option value="ETH">ETH</option>
+      <option value="CCC">CCC</option>
+    </select>
+
+    <label for="ynk-otc-amount">Quantidade</label>
+    <input id="ynk-otc-amount"
+           type="number"
+           min="0"
+           step="any"
+           placeholder="0,00">
+
+    <p>Moeda de referência: <strong>USDT</strong></p>
+    <p>Cotação: aguardando integração corporativa.</p>
+
+    <button type="button" disabled>
+      Solicitar cotação
+    </button>
+  </div>
+</section>
+
+<style>
+.ynk-otc-panel {
+  margin:30px 0;
+  color:#e5dcc7;
+}
+.ynk-otc-panel h2,
+.ynk-otc-panel h3 {
+  color:#c5a46a;
+}
+.ynk-otc-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:15px;
+  margin:18px 0;
+}
+.ynk-otc-box {
+  background:#061326;
+  border:1px solid #55472f;
+  border-radius:12px;
+  padding:20px;
+  margin-bottom:15px;
+}
+.ynk-otc-box label {
+  display:block;
+  margin:12px 0 6px;
+}
+.ynk-otc-box select,
+.ynk-otc-box input {
+  width:100%;
+  box-sizing:border-box;
+  background:#0b1e34;
+  color:#e5dcc7;
+  border:1px solid #b79a59;
+  border-radius:8px;
+  padding:12px;
+}
+.ynk-otc-box button {
+  background:#0b1e34;
+  color:#d5c080;
+  border:1px solid #b79a59;
+  border-radius:10px;
+  padding:14px;
+  opacity:.65;
+}
+</style>
+
 <h2>Meus ativos</h2>
 <div id="ynk-wallet-assets">Carregando ativos...</div>
 
