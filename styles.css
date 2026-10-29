@@ -1922,3 +1922,42 @@ a{color:inherit;text-decoration:none}.gold-frame{position:fixed;inset:12px;point
   padding: 12px;
   color: #d6bd83;
 }
+
+
+/* YNK EXCHANGE - AZUL MARINHO PREMIUM APROVADO */
+
+/* Fundo geral harmonizado com a imagem superior */
+body {
+  background: #061326;
+}
+
+/* Área financeira */
+.investment-section {
+  background: linear-gradient(180deg, #061326, #040e1d);
+}
+
+/* Cards de saldos e indicadores */
+.reference-metrics .exchange-metric {
+  background: linear-gradient(155deg, #0a1b30, #061326);
+  border-color: rgba(191,158,93,.24);
+}
+
+.reference-metrics .balance-card {
+  background:
+    radial-gradient(circle at top right,
+      rgba(191,158,93,.08), transparent 45%),
+    linear-gradient(155deg, #0b1e34, #061326);
+}
+
+/* Botões Mercado, Carteira, Comprar e Vender */
+.investment-section .dashboard-action:not(.dashboard-action-primary) {
+  background: linear-gradient(145deg, #0b1e34, #061326);
+  border-color: rgba(191,158,93,.55);
+  color: #d5c080;
+}
+
+/* Painéis financeiros e gráficos */
+.investment-section .exchange-panel {
+  background: linear-gradient(155deg, #091a2d, #050f20);
+  border-color: rgba(191,158,93,.20);
+}
