@@ -1831,3 +1831,15 @@ a{color:inherit;text-decoration:none}.gold-frame{position:fixed;inset:12px;point
     font-size: 12px;
   }
 }
+
+
+/* Segunda página: imagem integral sem logo duplicado */
+.site-header .ynk-top-logo {
+  display: none !important;
+}
+.ynk-second-hero-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 0;
+}
