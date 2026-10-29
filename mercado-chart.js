@@ -1,3 +1,19 @@
+
+function formatUSD(value) {
+  const numero = Number(value);
+
+  if (!Number.isFinite(numero)) {
+    return "—";
+  }
+
+  return numero.toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+}
+
 const YNK_API = "https://ynk-and-co-exchange.onrender.com";
 
 async function loadMarketCandles() {

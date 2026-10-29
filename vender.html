@@ -55,7 +55,138 @@ body {
   <h1>Vender</h1>
   <section class="ynk-page-panel">
     <h2>Área de venda de ativos</h2>
-    <p>Interface em preparação.</p>
+    
+<div id="ynk-trade-panel">
+  <label for="ynk-asset">Ativo digital</label>
+  <select id="ynk-asset">
+    <option value="BTC">Bitcoin (BTC)</option>
+    <option value="ETH">Ethereum (ETH)</option>
+    <option value="WBETH">Wrapped Beacon ETH (WBETH)</option>
+  </select>
+
+  <label for="ynk-quantity">Quantidade</label>
+  <input id="ynk-quantity"
+         type="number"
+         min="0"
+         step="any"
+         placeholder="0.00">
+
+  <label>Preço de referência (USD)</label>
+  <div id="ynk-price">Aguardando cotação...</div>
+
+  <label>Valor estimado (USD)</label>
+  <div id="ynk-estimate">—</div>
+
+  <p id="ynk-trade-status" role="status">
+    Simulação de negociação. Nenhuma ordem será enviada.
+  </p>
+</div>
+
+<style>
+#ynk-trade-panel {
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  max-width:560px;
+}
+#ynk-trade-panel label {
+  color:#c5a46a;
+  font-weight:600;
+}
+#ynk-trade-panel input,
+#ynk-trade-panel select {
+  background:#061326;
+  color:#e9e9e9;
+  border:1px solid #55472f;
+  border-radius:9px;
+  padding:14px;
+  font-size:16px;
+}
+#ynk-price,
+#ynk-estimate {
+  padding:16px;
+  background:#061326;
+  border:1px solid #55472f;
+  border-radius:9px;
+  font-size:20px;
+}
+#ynk-trade-status {
+  color:#c5a46a;
+  font-size:13px;
+}
+</style>
+
+<script>
+(async function () {
+  const asset = document.getElementById("ynk-asset");
+  const quantity = document.getElementById("ynk-quantity");
+  const priceBox = document.getElementById("ynk-price");
+  const estimate = document.getElementById("ynk-estimate");
+  const status = document.getElementById("ynk-trade-status");
+
+  let prices = {};
+
+  function money(value) {
+    return Number(value).toLocaleString("en-US", {
+      style:"currency",
+      currency:"USD"
+    });
+  }
+
+  function calculate() {
+    const price = prices[asset.value];
+    const amount = Number(quantity.value);
+
+    if (!Number.isFinite(price) || price <= 0) {
+      priceBox.textContent = "Cotação indisponível";
+      estimate.textContent = "—";
+      return;
+    }
+
+    priceBox.textContent = money(price);
+
+    estimate.textContent =
+      quantity.value !== "" &&
+      Number.isFinite(amount) &&
+      amount > 0
+        ? money(amount * price)
+        : "—";
+  }
+
+  async function loadPrices() {
+    try {
+      const response = await fetch(
+        "https://api.coingecko.com/api/v3/simple/price" +
+        "?ids=bitcoin,ethereum,wrapped-beacon-eth&vs_currencies=usd"
+      );
+
+      if (!response.ok) throw new Error("API indisponível");
+
+      const data = await response.json();
+
+      prices = {
+        BTC: data.bitcoin?.usd,
+        ETH: data.ethereum?.usd,
+        WBETH: data["wrapped-beacon-eth"]?.usd
+      };
+
+      status.textContent =
+        "Cotações de referência. Não constituem oferta executável.";
+    } catch (error) {
+      status.textContent =
+        "Não foi possível obter cotações neste momento.";
+    }
+
+    calculate();
+  }
+
+  asset.addEventListener("change", calculate);
+  quantity.addEventListener("input", calculate);
+
+  loadPrices();
+})();
+</script>
+
     <p>Nenhuma operação financeira é executada nesta página.</p>
   </section>
 </main>

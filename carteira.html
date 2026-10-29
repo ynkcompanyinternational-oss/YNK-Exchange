@@ -55,9 +55,264 @@ body {
   <h1>Carteira</h1>
   <section class="ynk-page-panel">
     <h2>Ativos, saldos e histórico</h2>
-    <p>Interface em preparação.</p>
+    
+<div id="ynk-wallet-status" role="status">
+  Conectando aos serviços financeiros...
+</div>
+
+<div class="ynk-wallet-grid">
+  <div class="ynk-wallet-box">
+    <h3>Saldo disponível</h3>
+    <strong id="ynk-wallet-balance">—</strong>
+  </div>
+  <div class="ynk-wallet-box">
+    <h3>Rede</h3>
+    <strong>Ethereum</strong>
+  </div>
+  <div class="ynk-wallet-box">
+    <h3>Ativos identificados</h3>
+    <strong id="ynk-wallet-count">—</strong>
+  </div>
+</div>
+
+<h2>Meus ativos</h2>
+<div id="ynk-wallet-assets">Carregando ativos...</div>
+
+<h2>Histórico de transações</h2>
+<div id="ynk-wallet-history">Carregando histórico...</div>
+
+<style>
+.ynk-wallet-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+  gap:15px;
+  margin:25px 0;
+}
+.ynk-wallet-box {
+  background:#061326;
+  border:1px solid #55472f;
+  border-radius:12px;
+  padding:20px;
+}
+.ynk-wallet-box h3 {
+  font-size:14px;
+  color:#c5a46a;
+}
+.ynk-wallet-box strong {
+  font-size:22px;
+  overflow-wrap:anywhere;
+}
+.ynk-wallet-item {
+  padding:14px;
+  margin:10px 0;
+  background:#061326;
+  border:1px solid #55472f;
+  border-radius:10px;
+  overflow-wrap:anywhere;
+}
+#ynk-wallet-status {
+  color:#c5a46a;
+  margin:15px 0;
+}
+</style>
+
+<script>
+(async function () {
+  const API = "https://ynk-and-co-exchange.onrender.com";
+  const status = document.getElementById("ynk-wallet-status");
+  const assets = document.getElementById("ynk-wallet-assets");
+  const history = document.getElementById("ynk-wallet-history");
+  const balance = document.getElementById("ynk-wallet-balance");
+  const count = document.getElementById("ynk-wallet-count");
+
+  function item(container, text) {
+    const div = document.createElement("div");
+    div.className = "ynk-wallet-item";
+    div.textContent = text;
+    container.appendChild(div);
+  }
+
+  async function get(path) {
+    const response = await fetch(API + path);
+    if (!response.ok) throw new Error("HTTP " + response.status);
+    return response.json();
+  }
+
+  const results = await Promise.allSettled([
+    get("/wallet/ethereum/approved-portfolio"),
+    get("/wallet/ethereum/transactions")
+  ]);
+
+  const portfolio = results[0];
+  const transactions = results[1];
+
+  assets.textContent = "";
+  history.textContent = "";
+
+  if (portfolio.status === "fulfilled") {
+    const data = portfolio.value;
+    const list = Array.isArray(data) ? data :
+      Array.isArray(data.assets) ? data.assets :
+      Array.isArray(data.tokens) ? data.tokens :
+      Array.isArray(data.portfolio) ? data.portfolio : [];
+
+    count.textContent = String(list.length);
+
+    for (const asset of list) {
+      const name = asset.symbol || asset.name || "Ativo";
+      const amount = asset.balance ?? asset.amount ?? "Não informado";
+      item(assets, name + " — Saldo: " + amount);
+    }
+
+    if (!list.length) {
+      item(assets, "Nenhum ativo disponível no formato reconhecido.");
+    }
+
+    const total = data.total_usd ?? data.total_value_usd;
+    if (total !== undefined && total !== null) {
+      const value = Number(total);
+      balance.textContent = Number.isFinite(value)
+        ? value.toLocaleString("en-US", {
+            style:"currency", currency:"USD"
+          })
+        : "Não informado";
+    } else {
+      balance.textContent = "Não informado";
+    }
+  } else {
+    count.textContent = "—";
+    balance.textContent = "Indisponível";
+    item(assets, "Não foi possível carregar o portfólio.");
+  }
+
+  if (transactions.status === "fulfilled") {
+    const data = transactions.value;
+    const list = Array.isArray(data) ? data :
+      Array.isArray(data.transactions) ? data.transactions :
+      Array.isArray(data.items) ? data.items : [];
+
+    for (const tx of list.slice(0, 20)) {
+      const type = tx.type || tx.operation || "Transação";
+      const value = tx.amount ?? tx.value ?? "Valor não informado";
+      const state = tx.status || "Status não informado";
+      item(history, type + " — " + value + " — " + state);
+    }
+
+    if (!list.length) {
+      item(history, "Nenhuma transação disponível.");
+    }
+  } else {
+    item(history, "Histórico temporariamente indisponível.");
+  }
+
+  status.textContent =
+    portfolio.status === "fulfilled" &&
+    transactions.status === "fulfilled"
+      ? "Consultas concluídas."
+      : "Alguns dados estão indisponíveis.";
+})();
+</script>
+
     <p>Nenhuma operação financeira é executada nesta página.</p>
   </section>
 </main>
+
+<script id="ynk-wallet-live-integration">
+(async function () {
+  const API = "https://ynk-and-co-exchange.onrender.com";
+
+  const el = id => document.getElementById(id);
+
+  async function consultar(rota) {
+    const resposta = await fetch(API + rota);
+    if (!resposta.ok) throw new Error("Serviço indisponível");
+    return resposta.json();
+  }
+
+  function adicionar(destino, texto) {
+    const div = document.createElement("div");
+    div.className = "ynk-wallet-item";
+    div.textContent = texto;
+    destino.appendChild(div);
+  }
+
+  const resultados = await Promise.allSettled([
+    consultar("/wallet/ethereum/approved-portfolio"),
+    consultar("/wallet/ethereum/transactions")
+  ]);
+
+  const portfolio = resultados[0];
+  const transacoes = resultados[1];
+
+  if (portfolio.status === "fulfilled") {
+    const dados = portfolio.value;
+    const lista = Array.isArray(dados) ? dados :
+      Array.isArray(dados.assets) ? dados.assets :
+      Array.isArray(dados.tokens) ? dados.tokens : [];
+
+    el("ynk-wallet-count").textContent = lista.length;
+
+    const area = el("ynk-wallet-assets");
+    area.textContent = "";
+
+    lista.forEach(ativo => {
+      adicionar(
+        area,
+        (ativo.symbol || ativo.name || "Ativo") +
+        " — " +
+        (ativo.balance ?? ativo.amount ?? "Saldo indisponível")
+      );
+    });
+
+    if (!lista.length) {
+      adicionar(area, "Nenhum ativo disponível.");
+    }
+
+    const total = dados.total_usd ?? dados.total_value_usd;
+    el("ynk-wallet-balance").textContent =
+      total == null || !Number.isFinite(Number(total))
+        ? "Não informado"
+        : Number(total).toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD"
+          });
+  } else {
+    el("ynk-wallet-assets").textContent =
+      "Não foi possível consultar os ativos.";
+  }
+
+  if (transacoes.status === "fulfilled") {
+    const dados = transacoes.value;
+    const lista = Array.isArray(dados) ? dados :
+      Array.isArray(dados.transactions) ? dados.transactions :
+      Array.isArray(dados.items) ? dados.items : [];
+
+    const area = el("ynk-wallet-history");
+    area.textContent = "";
+
+    lista.slice(0, 20).forEach(tx => {
+      adicionar(
+        area,
+        (tx.type || tx.operation || "Transação") +
+        " — " +
+        (tx.amount ?? tx.value ?? "Valor indisponível") +
+        " — " +
+        (tx.status || "Status não informado")
+      );
+    });
+
+    if (!lista.length) {
+      adicionar(area, "Nenhuma transação disponível.");
+    }
+  } else {
+    el("ynk-wallet-history").textContent =
+      "Histórico temporariamente indisponível.";
+  }
+
+  el("ynk-wallet-status").textContent =
+    "Consulta financeira concluída.";
+})();
+</script>
+
 </body>
 </html>
