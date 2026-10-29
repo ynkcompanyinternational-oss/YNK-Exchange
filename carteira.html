@@ -566,5 +566,69 @@ body {
   });
 })();
 </script>
+
+<script id="ynk-client-balance-script">
+(() => {
+  const painel = document.getElementById("ynk-client-assets");
+  const provider = window.ethereum;
+
+  if (!painel) return;
+
+  async function atualizar() {
+    if (!provider) {
+      painel.textContent = "Conecte uma carteira Web3 compatível.";
+      return;
+    }
+
+    try {
+      const contas = await provider.request({
+        method: "eth_accounts"
+      });
+
+      if (!contas || !contas.length) {
+        painel.textContent = "Aguardando conexão Web3";
+        return;
+      }
+
+      const rede = await provider.request({
+        method: "eth_chainId"
+      });
+
+      if (rede !== "0x1") {
+        painel.textContent = "Selecione Ethereum Mainnet.";
+        return;
+      }
+
+      const saldoHex = await provider.request({
+        method: "eth_getBalance",
+        params: [contas[0], "latest"]
+      });
+
+      const saldoWei = BigInt(saldoHex);
+      const inteiro = saldoWei / 1000000000000000000n;
+      const fracao = (
+        saldoWei % 1000000000000000000n
+      ).toString().padStart(18, "0").slice(0, 6);
+
+      painel.textContent =
+        "ETH disponível na carteira: " +
+        inteiro.toString() + "." + fracao + " ETH";
+
+    } catch (erro) {
+      painel.textContent = "Não foi possível consultar o saldo ETH.";
+    }
+  }
+
+  document.getElementById("ynk-connect-wallet")
+    ?.addEventListener("click", () => {
+      setTimeout(atualizar, 800);
+    });
+
+  provider?.on?.("accountsChanged", atualizar);
+  provider?.on?.("chainChanged", atualizar);
+
+  atualizar();
+})();
+</script>
 </body>
 </html>
