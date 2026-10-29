@@ -610,9 +610,50 @@ body {
         saldoWei % 1000000000000000000n
       ).toString().padStart(18, "0").slice(0, 6);
 
+
+      // YNK_CLIENT_USDT_BALANCE
+      const ethFormatado = inteiro.toString() + "." + fracao;
+
       painel.textContent =
-        "ETH disponível na carteira: " +
-        inteiro.toString() + "." + fracao + " ETH";
+        "ETH: " + ethFormatado + " | Consultando USDT...";
+
+      const contratoUSDT =
+        "0xdAC17F958D2ee523a2206206994597C13D831ec7";
+
+      const enderecoCliente = contas[0]
+        .slice(2)
+        .toLowerCase()
+        .padStart(64, "0");
+
+      const dadosConsulta = "0x70a08231" + enderecoCliente;
+
+      try {
+        const saldoUSDT = await provider.request({
+          method: "eth_call",
+          params: [{
+            to: contratoUSDT,
+            data: dadosConsulta
+          }, "latest"]
+        });
+
+        const unidades = BigInt(saldoUSDT);
+        const parteInteira = unidades / 1000000n;
+        const parteDecimal = (unidades % 1000000n)
+          .toString()
+          .padStart(6, "0");
+
+        painel.textContent =
+          "ETH: " + ethFormatado +
+          " | USDT: " +
+          parteInteira.toString() + "." +
+          parteDecimal;
+
+      } catch (erroUSDT) {
+        painel.textContent =
+          "ETH: " + ethFormatado +
+          " | USDT: consulta indisponível";
+      }
+
 
     } catch (erro) {
       painel.textContent = "Não foi possível consultar o saldo ETH.";
