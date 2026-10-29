@@ -3,16 +3,9 @@ document.getElementById("year").textContent = new Date().getFullYear();
 const toggle = document.querySelector(".menu-toggle");
 const nav = document.querySelector(".nav");
 toggle?.addEventListener("click", () => {
-  const open = nav.style.display === "flex";
-  nav.style.display = open ? "" : "flex";
-  nav.style.flexDirection = "column";
-  nav.style.position = "absolute";
-  nav.style.top = "70px";
-  nav.style.left = "20px";
-  nav.style.right = "20px";
-  nav.style.padding = "18px";
-  nav.style.background = "rgba(4,8,13,.98)";
-  nav.style.border = "1px solid rgba(183,154,89,.25)";
+  if (!nav) return;
+  const aberto = nav.classList.toggle("ynk-menu-open");
+  toggle.setAttribute("aria-expanded", String(aberto));
 });
 
 document.getElementById("asset-form")?.addEventListener("submit", (event) => {
